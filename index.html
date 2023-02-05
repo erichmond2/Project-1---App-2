@@ -1,0 +1,71 @@
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>USA Climate Zones & Capital Cities</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css" />
+<script src="https://js.arcgis.com/4.25/"></script>
+
+<style>
+html,
+body,
+#viewDiv {
+padding: 0;
+margin: 0;
+height: 100%;
+width: 100%;
+}
+</style>
+
+<script>
+require(["esri/Map", "esri/views/MapView", "esri/layers/FeatureLayer", "esri/config", "esri/core/urlUtils"], function(Map, MapView, FeatureLayer, esriConfig, urlUtils){
+const map = new Map({
+basemap: "terrain"
+});
+
+const view = new MapView({
+container: "viewDiv",
+map: map,
+
+extent: {
+xmin: -141.664837250328,
+ymin: 6.43685105536415,
+xmax: -86.3334381806722,
+ymax: 78.0151429266359,
+spatialReference: 4326
+}
+});
+
+var climatePopup = {
+title: "Climate Classification:",
+content: "{DIVISION}"
+};
+
+var majorCitiesPopup = {
+title: "City Name: {NAME}",
+content: "Population: {POPULATION} & is a type {POP_CLASS} class city."
+};
+
+var climateFL = new FeatureLayer({
+url: "https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_BaileysEcoregionsSubregions_01/MapServer/0",
+popupTemplate: climatePopup
+});
+        
+map.add(climateFL);
+
+var majorCitiesFL = new FeatureLayer({
+url:   "https://services.arcgis.com/P3ePLMYs2RVChkJx/arcgis/rest/services/USA_Major_Cities_/FeatureServer",
+popupTemplate: majorCitiesPopup
+});
+  
+map.add(majorCitiesFL);
+
+});
+</script>
+</head>
+
+<body>
+<div id="viewDiv"></div>
+</body>
+</html>
